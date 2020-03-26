@@ -1,0 +1,43 @@
+[inputs/script%3A%2F%2F.%2Fbin%2Fcpu_usage.sh]
+version = 7.3.4
+modtime = 1580312252.077443000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fdf_usage.sh]
+version = 7.3.4
+modtime = 1580312252.414584000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fdisk_usage.sh]
+version = 7.3.4
+modtime = 1580312252.701957000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Finterface_usage.sh]
+version = 7.3.4
+modtime = 1580312252.974790000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Floadavg.sh]
+version = 7.3.4
+modtime = 1580312253.147920000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fmemory_usage.sh]
+version = 7.3.4
+modtime = 1580312253.656143000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fprocess_total.sh]
+version = 7.3.4
+modtime = 1580312254.588716000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fprocess_usage.sh]
+version = 7.3.4
+modtime = 1580312253.977409000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fswap_usage.sh]
+version = 7.3.4
+modtime = 1580312254.219771000
+
+[inputs/script%3A%2F%2F.%2Fbin%2Fuptime_sec.sh]
+version = 7.3.4
+modtime = 1580312254.384933000
+
+[app/install/is_configured]
+version = 7.3.4
+modtime = 1580312254.760605000

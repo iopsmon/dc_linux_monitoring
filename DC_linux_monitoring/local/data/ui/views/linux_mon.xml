@@ -1,0 +1,280 @@
+<dashboard stylesheet="dark.css">
+  <label>Linux Monitoring</label>
+  <description>Linux Monitoring Dashboards</description>
+  <row>
+    <panel>
+      <title>low memory for splunk servers</title>
+      <chart>
+        <search>
+          <query>index=linux sourcetype=vmstat mem_used="*"
+| bin _time span=1h
+| eval free_memory = round(FreeMBytes)
+| where free_memory&lt;=2000
+| xyseries _time, host, free_memory</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">small</option>
+        <option name="trellis.splitBy">host</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>average cpu load &gt; 40%</title>
+      <chart>
+        <search>
+          <query>index=linux  sourcetype=cpu host=* 
+| bin _time span=15m
+| eval date_time =strftime(_time, "%d/%m/%Y %H:%M:%S")
+| where (cpu_load_percent&gt;=40) 
+| stats avg(cpu_load_percent) by host</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trellis.splitBy">_aggregation</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>ssh failed attempts</title>
+      <single>
+        <search>
+          <query>index=syslog sshd_protocol=ssh* "Failed password"
+| stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0xdc4e41"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="underLabel">ssh failed attempts</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20count%20AS%20%22Count%20of%20Failed%20Authentication%22%20from%20datamodel=Authentication%20where%20(nodename%20=%20Authentication.Failed_Authentication)%20groupby%20Authentication.user,%20Authentication.app,%20Authentication.src,%20Authentication.dest,%20Authentication.action%20prestats=true%20%7C%20stats%20dedup_splitvals=t%20count%20AS%20%22Count%20of%20Failed%20Authentication%22%20by%20Authentication.user,%20Authentication.app,%20Authentication.src,%20Authentication.dest,%20Authentication.action%20%7C%20sort%20limit=100%20Authentication.user%20%7C%20fields%20-%20_span%20%7C%20rename%20Authentication.user%20AS%20user%20Authentication.app%20AS%20app%20Authentication.src%20AS%20src%20Authentication.dest%20AS%20dest%20Authentication.action%20AS%20action%20%7C%20fillnull%20%22Count%20of%20Failed%20Authentication%22%20%7C%20fields%20user,%20app,%20src,%20dest,%20action,%20%22Count%20of%20Failed%20Authentication%22&amp;earliest=-24h@h&amp;latest=now</link>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>file system check (shows only less then 1000 (1GB) over the last hour</title>
+      <table>
+        <search>
+          <query>index=linux sourcetype=df Size="*" NOT filesystem=devtmpfs 
+| bin _time span=30m
+| eval date_time =strftime(_time, "%d/%m/%Y %H:%M:%S")
+| where (storage_free&lt;=1000) 
+| rename storage_free as free_megabytes_left
+| table date_time , host, Size, free_megabytes_left, filesystem, mount 
+| dedup host</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <format type="color" field="free_megabytes_left">
+          <colorPalette type="list">[#f90606,#ffbf00 ]</colorPalette>
+          <scale type="threshold">1000,2000</scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>cpu check (shows only the cpu percent over the last 15mins and greater than 65%)</title>
+      <table>
+        <search>
+          <query>index=linux  sourcetype=cpu host=* 
+| bin _time span=15m
+| eval date_time =strftime(_time, "%d/%m/%Y %H:%M:%S")
+| where (cpu_load_percent&gt;=40) 
+| table date_time, host, cpu_load_percent</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <format type="color" field="cpu_load_percent">
+          <colorPalette type="list">[#ffbf00,#f90606 ]</colorPalette>
+          <scale type="threshold">50,70</scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>free_memory_check (shows only the free memory available over 1 day, and less than 2Gb)</title>
+      <table>
+        <search>
+          <query>index=linux sourcetype=vmstat mem_used="*"
+| bin _time span=24h
+| eval date_time = strftime(_time, "%d/%m/%Y %H:%M:%S")
+| eval free_memory = round(FreeMBytes)
+| eval total_memory = round (mem)
+| eval used_memory = round (memUsedMB)
+| where free_memory&lt;=2000
+| table date_time, host, total_memory, used_memory, free_memory
+| sort free_memory
+| dedup host</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <format type="color" field="free_memory">
+          <colorPalette type="list">[#f90606,#ffbf00 ]</colorPalette>
+          <scale type="threshold">1000,2000</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>syslog cluster events</title>
+      <table>
+        <search>
+          <query>index=syslog sourcetype=linux_secure | cluster t=0.3 showcount=t 
+| table cluster_count, cluster_label _raw | sort - cluster_count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>bandwidth use by host /24h</title>
+      <table>
+        <search>
+          <query>index=linux sourcetype="bandwidth"  | eval mbytes=round(bytes/1024/1024,2) | stats sparkline sum(mbytes) as mbytes by host | sort - mbytes</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>failed_logins (This checks for invalid logins greater then 4)</title>
+      <table>
+        <search>
+          <query>index=syslog sshd_protocol=ssh* "Failed password"
+| table _time user,  src, dest, vendor_action
+| rename vendor_action AS action
+| stats count by user, src, dest, action
+| where count &gt; 4</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <format type="color" field="count">
+          <colorPalette type="list">[#ffbf00,#f90606]</colorPalette>
+          <scale type="threshold">5,10</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>sudo - copy check</title>
+      <table>
+        <search>
+          <query>index=linux sourcetype=bash_history sudo OR cp  | table _time,  user_name,  host, bash_command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
