@@ -68,7 +68,7 @@ Config:
 
 The polling can be adjusted in the inputs.conf in the TA-linux-metrics
 
-- index=linux_metrics
+- index=linux_metric
 
 You will need to run chmod +x for the shell scripts to run /bin
 
